@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: urban-spice-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: urban-spice-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,localhost,127.0.0.1"
+      - key: FRONTEND_URL
+        value: "https://your-urban-spice.vercel.app"
+      - key: CORS_ALLOWED_ORIGINS
+        value: "https://your-urban-spice.vercel.app"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://your-urban-spice.vercel.app"
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+
+databases:
+  - name: urban-spice-db
+    plan: free
+    databaseName: urban_spice
+    user: urban_spice_user
