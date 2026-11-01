@@ -5,6 +5,7 @@ class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to="categories/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0)
 
@@ -30,7 +31,7 @@ class MenuItem(models.Model):
     slug = models.SlugField(max_length=150, unique=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    image = models.CharField(max_length=500, blank=True)
+    image = models.ImageField(upload_to="menu_items/", max_length=500, blank=True, null=True)
     is_vegetarian = models.BooleanField(default=False)
     is_available = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)

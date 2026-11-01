@@ -2,6 +2,21 @@ from rest_framework import serializers
 from .models import Category, MenuItem
 
 
+def _resolve_image_url(image_field):
+    """
+    Safely resolves image URLs for Cloudinary uploads, external URLs, or empty values.
+    """
+    if not image_field:
+        return None
+    image_str = str(image_field)
+    if image_str.startswith("http://") or image_str.startswith("https://"):
+        return image_str
+    try:
+        return image_field.url
+    except Exception:
+        return image_str
+
+
 class CategorySerializer(serializers.ModelSerializer):
     item_count = serializers.SerializerMethodField()
 
@@ -12,6 +27,7 @@ class CategorySerializer(serializers.ModelSerializer):
             "name",
             "slug",
             "description",
+            "image",
             "is_active",
             "order",
             "item_count",
@@ -19,6 +35,11 @@ class CategorySerializer(serializers.ModelSerializer):
 
     def get_item_count(self, obj):
         return obj.items.filter(is_available=True).count()
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret["image"] = _resolve_image_url(instance.image)
+        return ret
 
 
 class MenuItemSerializer(serializers.ModelSerializer):
@@ -45,3 +66,8 @@ class MenuItemSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret["image"] = _resolve_image_url(instance.image)
+        return ret

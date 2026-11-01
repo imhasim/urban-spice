@@ -11,7 +11,7 @@ export interface MenuItem {
   category: string | number;
   category_name?: string;
   category_slug?: string;
-  image: string;
+  image?: string | null;
   is_vegetarian: boolean;
   is_available: boolean;
   is_featured: boolean;
@@ -24,6 +24,7 @@ export interface MenuCategory {
   name: string;
   slug: string;
   description: string;
+  image?: string | null;
   item_count?: number;
   icon?: string;
 }

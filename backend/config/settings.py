@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Cloudinary media storage
+    "cloudinary_storage",
+    "cloudinary",
     # Third-party apps
     "rest_framework",
     "rest_framework.authtoken",
@@ -127,15 +130,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-# Whitenoise storage for production static assets
+
+# Cloudinary media storage configuration
+# Credentials are read directly from the CLOUDINARY_URL environment variable
+CLOUDINARY_STORAGE = {
+    # Automatically parsed from CLOUDINARY_URL environment variable
+}
+
+# Storage backends: Cloudinary for media uploads, WhiteNoise for static assets
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # Media uploads (food photos, etc.)
 MEDIA_URL = "/media/"

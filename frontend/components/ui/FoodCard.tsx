@@ -29,7 +29,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({ item, onAddToCart }) => {
         {/* Food Image Container */}
         <div className="relative w-full h-52 sm:h-56 bg-[#1a1a1a] overflow-hidden">
           <Image
-            src={item.image}
+            src={item.image || "/images/hero-dish.jpg"}
             alt={item.name}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
